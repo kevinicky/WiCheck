@@ -58,6 +58,7 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                 if (questions.get(0).getPertayaan().equals("-")){
                     Intent intent = new Intent(MainCamera.this, Result.class);
                     intent.putExtra("AnswerYes", questions.get(0).getJawabanYes());
+                    intent.putExtra("AnswersYes", questions.get(0).getAnswerYes());
                     startActivity(intent);
                 }
                 else {
