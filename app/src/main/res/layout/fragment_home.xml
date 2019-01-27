@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+   <ImageButton
+        android:id="@+id/iBtn_PeeDetector"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="350dp"
+        android:layout_height="110dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/peedetector" />
+
+
+    <FrameLayout
+        android:id="@+id/FL_PeeDetector"
+        android:layout_width="350dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="19dp"
+        android:layout_below="@+id/iBtn_PeeDetector"
+        android:layout_marginLeft="31dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone">
+    </FrameLayout>
+
+
+
+</RelativeLayout>
