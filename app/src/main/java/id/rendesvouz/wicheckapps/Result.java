@@ -6,12 +6,14 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Vector;
+
+import id.rendesvouz.wicheckapps.Model.Colors;
 
 public class Result extends AppCompatActivity {
 
@@ -24,6 +26,7 @@ public class Result extends AppCompatActivity {
         TextView tvAnswer = findViewById(R.id.tv_answer);
         String answer = "";
         String answers = "";
+        int index = 0;
 
         //1000 milliseconds = 1 second
         int milliseconds = 3000;
@@ -35,17 +38,21 @@ public class Result extends AppCompatActivity {
         if (bundle.getString("AnswersNo") != null) answers = bundle.getString("AnswersNo");
         else if (bundle.getString("AnswersYes") != null) answers = bundle.getString("AnswersYes");
 
+        index = bundle.getInt("ColorIndex");
+
         tvAnswer.setText(answer);
-        Toast.makeText(Result.this, "Going to the home page in " + milliseconds / 1000 + " seconds", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Result.this, "Going to the home page in " + milliseconds / 1000 + " seconds", Toast.LENGTH_SHORT).show();
 
         //insert into Record table
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Result.this);
         databaseAccess.open();
 
-        PassingColor passingColor = PassingColor.getInstance();
-        String R = Integer.toString(passingColor.getRed());
-        String G = Integer.toString(passingColor.getGreen());
-        String B = Integer.toString(passingColor.getBlue());
+        Vector<Colors> colors = databaseAccess.getColorName();
+
+        String R = Integer.toString(colors.get(index).getR());
+        String G = Integer.toString(colors.get(index).getG());
+        String B = Integer.toString(colors.get(index).getB());
+
 
         //insert date
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.US);

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.Vector;
 
@@ -59,12 +60,15 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                     Intent intent = new Intent(MainCamera.this, Result.class);
                     intent.putExtra("AnswerYes", questions.get(0).getJawabanYes());
                     intent.putExtra("AnswersYes", questions.get(0).getAnswerYes());
+                    intent.putExtra("ColorIndex", index);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     Intent intent = new Intent(MainCamera.this, Question.class);
                     intent.putExtra("ColorIndex", index);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -83,9 +87,13 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
 
         //color distance algorithm
         colors = databaseAccess.getColorName();
+
         Vector<Integer> distance = new Vector<>();
         for (int i = 0; i < colors.size(); i++){
-            int temp = (int) (Math.pow(R - colors.get(i).getR(), 2) + Math.pow(G - colors.get(i).getG(), 2) + Math.pow(B - colors.get(i).getB(), 2));
+            int r = R - colors.get(i).getR();
+            int g = G - colors.get(i).getG();
+            int b = B - colors.get(i).getB();
+            int temp = (r * r) + (g * g) + (b * b);
             distance.add(temp);
         }
 
@@ -96,10 +104,22 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                 index = i;
             }
         }
-        passingColor.setRed(colors.get(index).getR());
-        passingColor.setGreen(colors.get(index).getG());
-        passingColor.setBlue(colors.get(index).getB());
+
+        R = colors.get(index).getR();
+        G = colors.get(index).getG();
+        B = colors.get(index).getB();
+
+        passingColor.setRed(0);
+        passingColor.setGreen(0);
+        passingColor.setBlue(0);
+
+        passingColor.setRed(R);
+        passingColor.setGreen(G);
+        passingColor.setBlue(B);
+
+        //Toast.makeText(this, passingColor.getRed() + " " +  passingColor.getGreen() + " " + passingColor.getBlue(), Toast.LENGTH_SHORT).show();
         databaseAccess.close();
+
     }
 
     void getQuestion(){
