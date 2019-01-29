@@ -1,10 +1,13 @@
 package id.rendesvouz.wicheckapps.UrineColorPicker;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -16,8 +19,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
+import java.lang.reflect.Parameter;
 import java.util.Vector;
 
 import id.rendesvouz.wicheckapps.DatabaseAccess;
@@ -38,6 +41,9 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
     private CameraColorPickerPreview mCameraPreview;
     private FrameLayout mPreviewContainer;
     private View mPointerRing;
+    private boolean isFlashOn;
+    private Camera.Parameters pm;
+    private boolean hasFlash;
     private static final int REQUEST_CAMERA = 100;
     FloatingActionButton fab_lockColor;
 
@@ -45,9 +51,27 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_camera);
+        hasFlash = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+
+        if(!hasFlash){
+            finish();
+        }
+
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        String cameraID = null;
+        try {
+            cameraID = cameraManager.getCameraIdList()[0];
+            cameraManager.setTorchMode(cameraID, true);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+
+
+
         mPreviewContainer = findViewById(R.id.camera_container);
         mPointerRing = findViewById(R.id.pointer_ring);
-
+//        getCamera();
+//        turnOnFlash();
         fab_lockColor = findViewById(R.id.fab_lockColor);
 
         fab_lockColor.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +111,8 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
 
         //color distance algorithm
         colors = databaseAccess.getColorName();
-
         Vector<Integer> distance = new Vector<>();
+
         for (int i = 0; i < colors.size(); i++){
             int r = R - colors.get(i).getR();
             int g = G - colors.get(i).getG();
@@ -117,9 +141,7 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
         passingColor.setGreen(G);
         passingColor.setBlue(B);
 
-        //Toast.makeText(this, passingColor.getRed() + " " +  passingColor.getGreen() + " " + passingColor.getBlue(), Toast.LENGTH_SHORT).show();
         databaseAccess.close();
-
     }
 
     void getQuestion(){
@@ -241,5 +263,30 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                 camera.release();
             }
         }
+
     }
+//    private void getCamera(){
+//        if (mCamera == null){
+//            try {
+//                mCamera = Camera.open();
+//                pm = mCamera.getParameters();
+//            }
+//            catch (RuntimeException e){
+//
+//            }
+//        }
+//    }
+//    public void turnOnFlash(){
+//        if (!isFlashOn){
+//            if (mCamera == null || pm == null){
+//                return;
+//            }
+//        }
+//
+//        pm = mCamera.getParameters();
+//        pm.setFlashMode(pm.FLASH_MODE_TORCH);
+//        mCamera.setParameters(pm);
+//        mCamera.startPreview();
+//        isFlashOn = true;
+//    }
 }

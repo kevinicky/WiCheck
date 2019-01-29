@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,7 +42,7 @@ public class Result extends AppCompatActivity {
         index = bundle.getInt("ColorIndex");
 
         tvAnswer.setText(answer);
-        //Toast.makeText(Result.this, "Going to the home page in " + milliseconds / 1000 + " seconds", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Result.this, "Going to the home page in " + milliseconds / 1000 + " seconds", Toast.LENGTH_SHORT).show();
 
         //insert into Record table
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Result.this);
@@ -53,6 +54,7 @@ public class Result extends AppCompatActivity {
         String G = Integer.toString(colors.get(index).getG());
         String B = Integer.toString(colors.get(index).getB());
 
+        //Toast.makeText(this, R + " " + G + " " + B, Toast.LENGTH_SHORT).show();
 
         //insert date
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.US);

@@ -20,12 +20,22 @@ public class PeeDetector extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_peedetector, container, false);
 
-        ImageButton iBtnCamera;
+        ImageButton iBtnCamera ,iBtnColor;
         iBtnCamera = view.findViewById(R.id.iBtn_Camera);
         iBtnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), MainCamera.class);
+                startActivity(intent);
+            }
+        });
+
+        iBtnColor = view.findViewById(R.id.iBtn_ColorChart);
+
+        iBtnColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(),SelectColor.class);
                 startActivity(intent);
             }
         });

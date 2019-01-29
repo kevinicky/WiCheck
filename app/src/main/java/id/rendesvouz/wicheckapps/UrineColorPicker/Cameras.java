@@ -2,11 +2,17 @@ package id.rendesvouz.wicheckapps.UrineColorPicker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.view.Surface;
 import android.view.WindowManager;
 
 import java.util.List;
+
+import static android.content.Context.CAMERA_SERVICE;
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 public final class Cameras {
     private static final double ASPECT_TOLERANCE = 0.15;
@@ -89,5 +95,7 @@ public final class Cameras {
     }
 
     private Cameras() {
+        
     }
+
 }
