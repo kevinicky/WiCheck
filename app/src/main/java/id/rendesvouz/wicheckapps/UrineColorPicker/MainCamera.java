@@ -1,6 +1,7 @@
 package id.rendesvouz.wicheckapps.UrineColorPicker;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -55,6 +56,17 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
         if(!hasFlash){
             finish();
         }
+
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        String cameraID = null;
+        try {
+            cameraID = cameraManager.getCameraIdList()[0];
+            cameraManager.setTorchMode(cameraID, true);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+
+
 
         mPreviewContainer = findViewById(R.id.camera_container);
         mPointerRing = findViewById(R.id.pointer_ring);
