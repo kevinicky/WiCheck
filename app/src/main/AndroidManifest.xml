@@ -3,7 +3,7 @@
     package="id.rendesvouz.wicheckapps">
 
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Question"></activity>
+        <activity android:name=".SelectColor"></activity>
+        <activity android:name=".Question" />
         <activity android:name=".Result" />
         <activity android:name=".MainActivity">
             <intent-filter>

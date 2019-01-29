@@ -39,6 +39,7 @@ public class Question extends AppCompatActivity {
                 Intent intent = new Intent(Question.this, Result.class);
                 intent.putExtra("AnswerYes", tempQuestion.getJawabanYes());
                 intent.putExtra("AnswersYes", tempQuestion.getAnswerYes());
+                intent.putExtra("ColorIndex", index);
                 startActivity(intent);
                 finish();
             }
@@ -54,6 +55,7 @@ public class Question extends AppCompatActivity {
                     Intent intent = new Intent(Question.this, Result.class);
                     intent.putExtra("AnswerNo", tempQuestion.getJawabanNo());
                     intent.putExtra("AnswersNo", tempQuestion.getAnswerNo());
+                    intent.putExtra("ColorIndex", index);
                     startActivity(intent);
                     finish();
                 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.lang.reflect.Parameter;
 import java.util.Vector;
 
 import id.rendesvouz.wicheckapps.DatabaseAccess;
@@ -37,6 +40,9 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
     private CameraColorPickerPreview mCameraPreview;
     private FrameLayout mPreviewContainer;
     private View mPointerRing;
+    private boolean isFlashOn;
+    private Camera.Parameters pm;
+    private boolean hasFlash;
     private static final int REQUEST_CAMERA = 100;
     FloatingActionButton fab_lockColor;
 
@@ -44,9 +50,16 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_camera);
+        hasFlash = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+
+        if(!hasFlash){
+            finish();
+        }
+
         mPreviewContainer = findViewById(R.id.camera_container);
         mPointerRing = findViewById(R.id.pointer_ring);
-
+//        getCamera();
+//        turnOnFlash();
         fab_lockColor = findViewById(R.id.fab_lockColor);
 
         fab_lockColor.setOnClickListener(new View.OnClickListener() {
@@ -59,12 +72,15 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                     Intent intent = new Intent(MainCamera.this, Result.class);
                     intent.putExtra("AnswerYes", questions.get(0).getJawabanYes());
                     intent.putExtra("AnswersYes", questions.get(0).getAnswerYes());
+                    intent.putExtra("ColorIndex", index);
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     Intent intent = new Intent(MainCamera.this, Question.class);
                     intent.putExtra("ColorIndex", index);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -84,8 +100,12 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
         //color distance algorithm
         colors = databaseAccess.getColorName();
         Vector<Integer> distance = new Vector<>();
+
         for (int i = 0; i < colors.size(); i++){
-            int temp = (int) (Math.pow(R - colors.get(i).getR(), 2) + Math.pow(G - colors.get(i).getG(), 2) + Math.pow(B - colors.get(i).getB(), 2));
+            int r = R - colors.get(i).getR();
+            int g = G - colors.get(i).getG();
+            int b = B - colors.get(i).getB();
+            int temp = (r * r) + (g * g) + (b * b);
             distance.add(temp);
         }
 
@@ -96,9 +116,19 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                 index = i;
             }
         }
-        passingColor.setRed(colors.get(index).getR());
-        passingColor.setGreen(colors.get(index).getG());
-        passingColor.setBlue(colors.get(index).getB());
+
+        R = colors.get(index).getR();
+        G = colors.get(index).getG();
+        B = colors.get(index).getB();
+
+        passingColor.setRed(0);
+        passingColor.setGreen(0);
+        passingColor.setBlue(0);
+
+        passingColor.setRed(R);
+        passingColor.setGreen(G);
+        passingColor.setBlue(B);
+
         databaseAccess.close();
     }
 
@@ -221,5 +251,30 @@ public class MainCamera extends AppCompatActivity implements CameraColorPickerPr
                 camera.release();
             }
         }
+
     }
+//    private void getCamera(){
+//        if (mCamera == null){
+//            try {
+//                mCamera = Camera.open();
+//                pm = mCamera.getParameters();
+//            }
+//            catch (RuntimeException e){
+//
+//            }
+//        }
+//    }
+//    public void turnOnFlash(){
+//        if (!isFlashOn){
+//            if (mCamera == null || pm == null){
+//                return;
+//            }
+//        }
+//
+//        pm = mCamera.getParameters();
+//        pm.setFlashMode(pm.FLASH_MODE_TORCH);
+//        mCamera.setParameters(pm);
+//        mCamera.startPreview();
+//        isFlashOn = true;
+//    }
 }
