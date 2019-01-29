@@ -73,7 +73,7 @@ public class Question extends AppCompatActivity {
 
     private void updateQuestions(int i){
         tempQuestion = questions.get(i);
-        tvQuestion.setText(tempQuestion.getPertayaan() + Integer.toString(tempQuestion.getColor()));
+        tvQuestion.setText(tempQuestion.getPertayaan());
     }
 
 }
